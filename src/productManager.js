@@ -10,7 +10,7 @@ class ProductManager {
         try {
             return JSON.parse(await fs.promises.readFile(this.pathFile, "utf-8"));
         } catch (error) {
-            throw new Error(`Error al leer el archivo JSON.`, error.message);
+            throw new Error(`Error al leer el archivo JSON.`, error);
         }
     }
 
@@ -20,7 +20,7 @@ class ProductManager {
             await fs.promises.writeFile(this.pathFile, JSON.stringify(data, null, 2), "utf-8");
             return;
         } catch (error) {
-            throw new Error(`Error al escribir el archivo JSON.`, error.message);
+            throw new Error(`Error al escribir el archivo JSON.`, error);
         }
     }
 
@@ -30,7 +30,7 @@ class ProductManager {
             const products = await this.readJSON();
             return products;
         } catch (error) {
-            throw new Error(`Error al obtener los productos.`, error.message);
+            throw new Error(`Error al obtener los productos.`, error);
         }
     }
 
@@ -40,11 +40,11 @@ class ProductManager {
             const products = await this.readJSON();
             const productIndex = products.findIndex((p) => p.id === parseInt(pid));
             if (productIndex === -1) {
-                throw new Error(`Producto no encontrado. ID: ${pid}`, error.message);
+                throw new Error(`Producto no encontrado. ID: ${pid}`, error);
             }
             return products[productIndex];
         } catch (error) {
-            throw new Error(`Error al obtener el producto. ID: ${pid}`, error.message);
+            throw new Error(`Error al obtener el producto. ID: ${pid}`, error);
         }
     }
 
@@ -63,7 +63,7 @@ class ProductManager {
             thumbnails !== "" ? thumbnails.trim() : thumbnails;
 
             if (title == "" || description == "" || code == "" || price < 0 || stock < 0 || category == "") {
-                throw new Error(`Ingrese los valores correctamente.`, error.message);
+                throw new Error(`Ingrese los valores correctamente.`, error);
             }
             if (products.find(p => p.code === code)) {
                 throw new Error(`Error en el campo code (${code}). Ya se encuentra en el listado de productos.`, error.message);
@@ -75,7 +75,7 @@ class ProductManager {
             await this.writeJSON(products);
             return;
         } catch (error) {
-            throw new Error(`Error al agregar el producto.`, error.message);
+            throw new Error(`Error al agregar el producto.`, error);
         }
     }
 
@@ -85,13 +85,13 @@ class ProductManager {
             const products = await this.readJSON();
             const productIndex = products.findIndex((p) => p.id === parseInt(pid));
             if (productIndex === -1) {
-                throw new Error(`Producto no encontrado. ID: ${pid}`, error.message);
+                throw new Error(`Producto no encontrado. ID: ${pid}`, error);
             }
             products[productIndex] = { ...products[productIndex], ...updatedProduct };
             await this.writeJSON(products);
             return;
         } catch (error) {
-            throw new Error(`Error al modificar el producto. ID: ${pid}`, error.message);
+            throw new Error(`Error al modificar el producto. ID: ${pid}`, error);
         }
     }
 
@@ -101,13 +101,13 @@ class ProductManager {
             const products = await this.readJSON();
             const productIndex = products.findIndex((p) => p.id === parseInt(pid));
             if (productIndex === -1) {
-                throw new Error(`Producto no encontrado. ID: ${pid}`, error.message);
+                throw new Error(`Producto no encontrado. ID: ${pid}`, error);
             }
             products.splice(productIndex, 1);
             await this.writeJSON(products);
             return;
         } catch (error) {
-            throw new Error(`Error al eliminar el producto. ID: ${pid}`, error.message);
+            throw new Error(`Error al eliminar el producto. ID: ${pid}`, error);
         }
     }
 

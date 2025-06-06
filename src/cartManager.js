@@ -10,7 +10,7 @@ class CartManager {
         try {
             return JSON.parse(await fs.promises.readFile(this.pathFile, "utf-8"));
         } catch (error) {
-            throw new Error(`Error al leer el archivo JSON.`, error.message);
+            throw new Error(`Error al leer el archivo JSON.`, error);
         }
     }
 
@@ -20,7 +20,7 @@ class CartManager {
             await fs.promises.writeFile(this.pathFile, JSON.stringify(data, null, 2), "utf-8");
             return;
         } catch (error) {
-            throw new Error("Error al escribir el archivo JSON.", error.message);
+            throw new Error("Error al escribir el archivo JSON.", error);
         }
     }
 
@@ -30,7 +30,7 @@ class CartManager {
             const carts = await this.readJSON();
             return carts;
         } catch (error) {
-            throw new Error(`Error al obtener los carritos.`, error.message);
+            throw new Error(`Error al obtener los carritos.`, error);
         }
     }
 
@@ -40,11 +40,11 @@ class CartManager {
             const carts = await this.readJSON();
             const cartIndex = carts.findIndex((c) => c.id === parseInt(cid));
             if (cartIndex === -1) {
-                throw new Error(`Carrito no encontrado. ID: ${cid}`, error.message);
+                throw new Error(`Carrito no encontrado. ID: ${cid}`, error);
             }
             return carts[cartIndex].products;
         } catch (error) {
-            throw new Error(`Error al obtener el carrito. ID: ${cid}`, error.message);
+            throw new Error(`Error al obtener el carrito. ID: ${cid}`, error);
         }
     }
 
@@ -58,7 +58,7 @@ class CartManager {
             await this.writeJSON(carts);
             return;
         } catch (error) {
-            throw new Error(`Error al agregar el carrito`, error.message);
+            throw new Error(`Error al agregar el carrito`, error);
         }
     }
 
@@ -68,7 +68,7 @@ class CartManager {
             const carts = await this.readJSON();
             const cartIndex = carts.findIndex((c) => c.id === parseInt(cid));
             if (cartIndex === -1) {
-                throw new Error(`Carrito no encontrado. ID: ${cid}`, error.message);
+                throw new Error(`Carrito no encontrado. ID: ${cid}`, error);
             }
             const productIndex = carts[cartIndex].products.findIndex((p) => p.id === parseInt(pid));
             if (productIndex === -1) {
@@ -79,7 +79,7 @@ class CartManager {
             await this.writeJSON(carts);
             return;
         } catch (error) {
-            throw new Error(`Error al modificar el carrito. ID: ${cid}`, error.message);
+            throw new Error(`Error al modificar el carrito. ID: ${cid}`, error);
         }
     }
 
@@ -89,13 +89,13 @@ class CartManager {
             const carts = await this.readJSON();
             const cartIndex = carts.findIndex((c) => c.id === parseInt(cid));
             if (cartIndex === -1) {
-                throw new Error(`Carrito no encontrado. ID: ${cid}`, error.message);
+                throw new Error(`Carrito no encontrado. ID: ${cid}`, error);
             }
             carts.splice(cartIndex, 1);
             await this.writeJSON(carts);
             return;
         } catch (error) {
-            throw new Error(`Error al eliminar el carrito. ID: ${cid}`, error.message);
+            throw new Error(`Error al eliminar el carrito. ID: ${cid}`, error);
         }
     }
 
