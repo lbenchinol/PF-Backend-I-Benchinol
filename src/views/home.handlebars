@@ -2,13 +2,15 @@
     <h1>Home</h1>
 </div>
 
-
-
-
-
-
-<script src="/src/public/js/home.js"></script>
-
-
-
-{{!--  title, description, price --}}
+<div>
+    {{#each products}}
+    <div id={{this.id}}>
+        <h2>{{this.title}}</h2>
+        <details>
+            <summary>Descripción</summary>
+            <p>{{this.description}}</p>
+        </details>
+        <h3>Precio: $ {{this.price}}</h3>
+    </div>
+    {{/each}}
+</div>

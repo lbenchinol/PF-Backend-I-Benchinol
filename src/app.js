@@ -25,11 +25,15 @@ app.set('view engine', 'handlebars');
 app.set('views', './src/views');
 
 // ---------------------------------------------------------
-
 // Endpoints
 
 app.use('/', viewsRouter);
 app.use('/api', productApiRouter, cartApiRouter);
+
+// ---------------------------------------------------------
+// Websocket
+
+
 
 // ---------------------------------------------------------
 

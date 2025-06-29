@@ -2,7 +2,7 @@ import express from 'express';
 
 import CartManager from '../../cartManager.js';
 
-const cartManager = new CartManager("../../carts.json");
+const cartManager = new CartManager("./src/carts.json");
 
 const cartApiRouter = express.Router();
 

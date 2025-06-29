@@ -2,11 +2,11 @@ import express from 'express';
 
 import ProductManager from '../../productManager.js';
 
-const productManager = new ProductManager("../../products.json");
+const productManager = new ProductManager("./src/products.json");
 
 const productApiRouter = express.Router();
 
-//  Obtiene produ
+//  Obtiene productos
 productApiRouter.get('/products/', async (req, res) => {
     try {
         const products = await productManager.getProducts();
