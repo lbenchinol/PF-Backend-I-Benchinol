@@ -1,16 +1,15 @@
 <div>
-    <h1>Home</h1>
+    <h1 class="text-center fw-bold">Home</h1>
 </div>
 
-<div>
+<div class="container d-flex flex-row mb-1">
     {{#each products}}
-    <div id={{this.id}}>
-        <h2>{{this.title}}</h2>
-        <details>
-            <summary>Descripción</summary>
-            <p>{{this.description}}</p>
-        </details>
-        <h3>Precio: $ {{this.price}}</h3>
+    <div id={{this.id}} class="card bg-body-secondary border border-black m-4" style="width: 18rem">
+        <div class="card-body">
+            <h5 class="card-title fw-bold">{{this.title}}</h5>
+            <p class="card-text">{{this.description}}</p>
+            <p class="card-text fw-semibold">Precio: $ {{this.price}}</p>
+        </div>
     </div>
     {{/each}}
 </div>
