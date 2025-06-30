@@ -4,27 +4,27 @@
 
 <div class="container container-lg border rounded border-2 border-primary">
     <p class="container container-lg fw-semibold mb-3">Nuevo producto</p>
-    <form class="container container-lg mb-3">
+    <form id="form" class="container container-lg mb-3">
         <div class="container mb-3">
-            <input type="text" name="title" placeholder="Nombre del producto" required>
+            <input id="form-title" type="text" name="title" placeholder="Nombre del producto" required>
         </div>
         <div class="container mb-3">
-            <input type="text" name="description" placeholder="Descripcion del producto" required>
+            <input id="form-description" type="text" name="description" placeholder="Descripcion del producto" required>
         </div>
         <div class="container mb-3">
-            <input type="text" name="code" placeholder="Codigo del producto" required>
+            <input id="form-code" type="text" name="code" placeholder="Codigo del producto" required>
         </div>
         <div class="container mb-3">
-            <input type="number" name="price" placeholder="Precio del producto" required>
+            <input id="form-price" type="number" name="price" placeholder="Precio del producto" required>
         </div>
         <div class="container mb-3">
-            <input type="number" name="stock" placeholder="Stock del producto" required>
+            <input id="form-stock" type="number" name="stock" placeholder="Stock del producto" required>
         </div>
         <div class="container mb-3">
-            <input type="text" name="category" placeholder="Categoria del producto" required>
+            <input id="form-category" type="text" name="category" placeholder="Categoria del producto" required>
         </div>
         <div class="container mb-3">
-            <input type="text" name="thumbnails" placeholder="Ruta de imagen del producto">
+            <input id="form-thumbnails" type="text" name="thumbnails" placeholder="Ruta de imagen del producto">
         </div>
         <button type="submit" class="btn btn-outline-primary btn-sm">Agregar</button>
     </form>
@@ -32,19 +32,18 @@
 
 <div class="container container-lg mt-4">
     <p class="fw-semibold mb-3">Productos</p>
-    <div class="container d-flex flex-row mb-1">
+    <div id="productsContainer" class="container d-flex flex-row mb-1">
         {{#each products}}
         <div id={{this.id}} class="card bg-body-secondary border border-black m-4" style="width: 18rem">
             <div class="card-body">
                 <h5 class="card-title fw-bold">{{this.title}}</h5>
                 <p class="card-text">{{this.description}}</p>
                 <p class="card-text fw-semibold">Precio: $ {{this.price}}</p>
-                <button type="submit" class="btn btn-outline-danger btn-sm">Eliminar</button>
+                <button id='btn{{this.id}}' class="btnDelete btn btn-outline-danger btn-sm">Eliminar</button>
             </div>
         </div>
         {{/each}}
     </div>
 </div>
-
 <script src="/socket.io/socket.io.js"></script>
-<script src="/src/public/js/realTimeProducts.js"></script>
+<script src="/js/realTimeProducts.js"></script>

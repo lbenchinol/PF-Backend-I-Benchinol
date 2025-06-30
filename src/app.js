@@ -8,6 +8,9 @@ import cartApiRouter from './routers/api/cartApi.router.js';
 
 import viewsRouter from './routers/views/views.router.js';
 
+import ProductManager from './productManager.js';
+const productManager = new ProductManager('./src/products.json');
+
 
 const app = express();
 const server = http.createServer(app);
@@ -33,7 +36,27 @@ app.use('/api', productApiRouter, cartApiRouter);
 // ---------------------------------------------------------
 // Websocket
 
+io.on('connection', (socket) => {
+    // Recibo de nuevo producto y envio de nuevo producto a todos
+    socket.on('newProduct', async (newProductDOM) => {
+        try {
+            const newProduct = await productManager.addProduct(newProductDOM);
+            socket.emit('addProduct', newProduct);
+        } catch (error) {
+            throw new Error(`Error al agregar el producto.`, error);
+        }
+    });
 
+    // Recibo producto eliminado y envio producto a eliminar a todos
+    socket.on('deleteProduct', async (deletedProductId) => {
+        try {
+            await productManager.deleteProductById(deletedProductId);
+            socket.emit('deleteProductbyId', deletedProductId);
+        } catch (error) {
+            throw new Error(`Error al eliminar el producto.`, error);
+        }
+    });
+});
 
 // ---------------------------------------------------------
 

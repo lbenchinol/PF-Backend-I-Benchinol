@@ -73,7 +73,7 @@ class ProductManager {
             const newProduct = { id: newId, title, description, code, price, status, stock, category, thumbnails };
             products.push(newProduct);
             await this.writeJSON(products);
-            return;
+            return newProduct;
         } catch (error) {
             throw new Error(`Error al agregar el producto.`, error);
         }
