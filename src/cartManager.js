@@ -83,19 +83,39 @@ class CartManager {
         }
     }
 
-    //  Elimina un carrito segun ID
-    async deleteCartById(cid) {
+    //  Vaciar un carrito segun ID
+    async cleanCartById(cid) {
         try {
             const carts = await this.readJSON();
             const cartIndex = carts.findIndex((c) => c.id === parseInt(cid));
             if (cartIndex === -1) {
                 throw new Error(`Carrito no encontrado. ID: ${cid}`, error);
             }
-            carts.splice(cartIndex, 1);
+            carts[cartIndex].products = [];
             await this.writeJSON(carts);
             return;
         } catch (error) {
-            throw new Error(`Error al eliminar el carrito. ID: ${cid}`, error);
+            throw new Error(`Error al vaciar el carrito. ID: ${cid}`, error);
+        }
+    }
+
+    // Elimina producto segun ID del carrito segun ID
+    async deleteProductById(cid, pid) {
+        try {
+            const carts = await this.readJSON();
+            const cartIndex = carts.findIndex((c) => c.id === parseInt(cid));
+            if (cartIndex === -1) {
+                throw new Error(`Carrito no encontrado. ID: ${cid}`, error);
+            }
+            const productIndex = carts[cartIndex].products.findIndex((p) => p.id === parseInt(pid));
+            if (productIndex === -1) {
+                throw new Error(`Producto no encontrado. ID: ${pid}`, error);
+            }
+            carts[cartIndex].products.splice(productIndex, 1);
+            await this.writeJSON(carts);
+            return;
+        } catch (error) {
+            throw new Error(`Error al eliminar el producto ID: ${pid} del carrito ID: ${cid}`, error);
         }
     }
 

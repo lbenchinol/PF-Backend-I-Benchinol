@@ -1,46 +1,57 @@
 [
-    {
-        "id": 1,
-        "title": "Mouse A7",
-        "description": "Mouse gamer A7 con RGB y sensor láser.",
-        "code": "abc1",
-        "price": 150,
-        "status": true,
-        "stock": 100,
-        "category": "perifericos",
-        "thumbnails": ""
-    },
-    {
-        "id": 2,
-        "title": "Mouse A8",
-        "description": "Mouse gamer A8 con sensor láser.",
-        "code": "abc2",
-        "price": 170,
-        "status": true,
-        "stock": 10,
-        "category": "perifericos",
-        "thumbnails": ""
-    },
-    {
-        "id": 3,
-        "title": "Teclado G220",
-        "description": "Teclado mecánico con RGB.",
-        "code": "abc3",
-        "price": 200,
-        "status": true,
-        "stock": 30,
-        "category": "perifericos",
-        "thumbnails": ""
-    },
-    {
-        "id": 4,
-        "title": "Mouse Logitech Pro X",
-        "description": "Mouse gamer",
-        "code": "ABC123",
-        "price": 130,
-        "status": true,
-        "stock": 10,
-        "category": "perifericos",
-        "thumbnails": ""
-    }
+  {
+    "id": 1,
+    "title": "Mouse A7",
+    "description": "Mouse gamer A7 con RGB y sensor láser.",
+    "code": "abc1",
+    "price": 150,
+    "status": true,
+    "stock": 100,
+    "category": "perifericos",
+    "thumbnails": ""
+  },
+  {
+    "id": 2,
+    "title": "Mouse A8",
+    "description": "Mouse gamer A8 con sensor láser.",
+    "code": "abc2",
+    "price": 170,
+    "status": true,
+    "stock": 10,
+    "category": "perifericos",
+    "thumbnails": ""
+  },
+  {
+    "id": 3,
+    "title": "Teclado G220",
+    "description": "Teclado mecánico con RGB.",
+    "code": "abc3",
+    "price": 200,
+    "status": true,
+    "stock": 30,
+    "category": "perifericos",
+    "thumbnails": ""
+  },
+  {
+    "id": 4,
+    "title": "Mouse Logitech Pro X",
+    "description": "Mouse gamer",
+    "code": "ABC123",
+    "price": 130,
+    "status": true,
+    "stock": 10,
+    "category": "perifericos",
+    "thumbnails": ""
+  },
+  {
+    "id": 5,
+    "title": "Mouse Logitech Pro X",
+    "description": "Mouse gamer",
+    "code": "ABC12333",
+    "price": 130,
+    "status": true,
+    "stock": 10,
+    "category": "Perifericos",
+    "thumbnails": ""
+  }
 ]

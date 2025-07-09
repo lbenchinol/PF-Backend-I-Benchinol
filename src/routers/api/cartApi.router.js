@@ -40,4 +40,27 @@ cartApiRouter.post('/carts/:cid/product/:pid', async (req, res) => {
     }
 });
 
+//  Elimina del carrito por ID un producto por ID
+cartApiRouter.delete('/carts/:cid/product/:pid', async (req, res) => {
+    try {
+        const cid = req.params.cid;
+        const pid = req.params.pid;
+        await cartManager.deleteProductById(cid, pid);
+        res.status(200).json({ status: "success" });
+    } catch (error) {
+        res.status(500).json({ status: "error" });
+    }
+});
+
+//  Elimina el carrito por ID
+cartApiRouter.delete('/carts/:cid', async (req, res) => {
+    try {
+        const cid = req.params.cid;
+        await cartManager.cleanCartById(cid);
+        res.status(200).json({ status: "success" });
+    } catch (error) {
+        res.status(500).json({ status: "error" });
+    }
+});
+
 export default cartApiRouter;

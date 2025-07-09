@@ -2,6 +2,10 @@ import express from 'express';
 import http from 'http';
 import { engine } from 'express-handlebars';
 import { Server } from 'socket.io';
+import { connnectMongoDB } from './db/mongodb.js';
+import config from './config/config.js';
+
+import __dirname from '../dirname.js';
 
 import productApiRouter from './routers/api/productApi.router.js';
 import cartApiRouter from './routers/api/cartApi.router.js';
@@ -11,15 +15,16 @@ import viewsRouter from './routers/views/views.router.js';
 import ProductManager from './productManager.js';
 const productManager = new ProductManager('./src/products.json');
 
-
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-const PORT = 8080;
+
+connnectMongoDB();
+ 
 
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
 
 // Configuracion Handlebars
 
@@ -60,6 +65,7 @@ io.on('connection', (socket) => {
 
 // ---------------------------------------------------------
 
+const PORT = config.port;
 server.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
