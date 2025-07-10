@@ -33,7 +33,7 @@ class ProductManager {
                 if (parseInt(stock) < 1) {
                     throw new Error('Error, ingrese los valores de "stock" correctamente.');
                 } else {
-                    filterQuery.stock = stock;
+                    filterQuery.stock = { $gte: stock };
                 }
             }
 
