@@ -37,11 +37,8 @@ class ProductManager {
                 }
             }
 
-            const data = lean ? await Product.paginate(filterQuery, options).lean() : await Product.paginate(filterQuery, options);
+            const payload = lean ? await Product.paginate(filterQuery, options).lean() : await Product.paginate(filterQuery, options);
 
-            const products = data.docs;
-            delete data.docs;
-            const payload = { products, ...data };
             return payload;
         } catch (error) {
             throw new Error(`Error al obtener los productos.`, error);
