@@ -9,12 +9,8 @@ const productApiRouter = express.Router();
 productApiRouter.get('/products/', async (req, res) => {
     try {
         const filters = req.query;
-        const data = await productManager.getProducts(filters);
-
-        const payload = data.docs;
-        delete data.docs;
-
-        res.status(200).json({ status: 'success', payload, ...data });
+        const response = await productManager.getProducts(filters);
+        res.status(200).json(response);
     } catch (error) {
         res.status(500).json({ status: "error" });
     }

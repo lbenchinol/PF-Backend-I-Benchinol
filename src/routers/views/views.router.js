@@ -10,12 +10,12 @@ viewsRouter.get(('/'), async (req, res) => {
     try {
         const filters = req.query;
         const lean = true;
-        const paylaod = await productManager.getProducts(filters, lean);
+        const data = await productManager.getProducts(filters, lean);
         const links = [];
-        for (let i = 1; i <= paylaod.totalPages; i++) {
-            links.push({ text: i, link: `?limit=${paylaod.limit}&page=${i}` });
+        for (let i = 1; i <= data.totalPages; i++) {
+            links.push({ text: i, link: `?limit=${data.limit}&page=${i}` });
         }
-        res.render('home', { products: paylaod.products, links });
+        res.render('home', { products: data.payload, links });
     } catch (error) {
         res.render('error');
     }
@@ -24,12 +24,13 @@ viewsRouter.get(('/'), async (req, res) => {
 viewsRouter.get(('/realtimeproducts'), async (req, res) => {
     try {
         const filters = req.query;
-        const payload = await productManager.getProducts(filters);
+        const lean = true;
+        const data = await productManager.getProducts(filters, lean);
         const links = [];
-        for (let i = 1; i <= paylaod.totalPages; i++) {
-            links.push({ text: i, link: `?limit=${paylaod.limit}&page=${i}` });
+        for (let i = 1; i <= data.totalPages; i++) {
+            links.push({ text: i, link: `?limit=${data.limit}&page=${i}` });
         }
-        res.render('realTimeProducts', { products: payload.products, links });
+        res.render('realTimeProducts', { products: data.payload, links });
     } catch (error) {
         res.render('error');
     }

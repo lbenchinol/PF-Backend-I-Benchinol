@@ -19,15 +19,8 @@ class ProductManager {
             } else {
                 options.page = page;
             }
-            if (sort) {
-                if (sort !== 'asc' && sort !== 'desc') {
-                    throw new Error('Error, ingrese los valores de "sort" correctamente.');
-                } else {
-                    options.sort = { price: sort };
-                }
-            }
             if (category) {
-                filterQuery.category = category;
+                filterQuery.category = category.toLowerCase();
             }
             if (stock) {
                 if (parseInt(stock) < 1) {
@@ -36,10 +29,20 @@ class ProductManager {
                     filterQuery.stock = { $gte: stock };
                 }
             }
+            if (sort) {
+                if (sort.toLowerCase() !== 'asc' && sort.toLowerCase() !== 'desc') {
+                    throw new Error('Error, ingrese los valores de "sort" correctamente.');
+                } else {
+                    options.sort = { price: sort.toLowerCase() };
+                }
+            }
 
-            const payload = lean ? await Product.paginate(filterQuery, options).lean() : await Product.paginate(filterQuery, options);
+            const data = lean ? await Product.paginate(filterQuery, { ...options, lean: true }) : await Product.paginate(filterQuery, options);
 
-            return payload;
+            const payload = data.docs;
+            delete data.docs;
+            const response = { status: 'success', payload, ...data };
+            return response;
         } catch (error) {
             throw new Error(`Error al obtener los productos.`, error);
         }
