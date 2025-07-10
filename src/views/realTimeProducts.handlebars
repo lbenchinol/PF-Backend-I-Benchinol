@@ -45,5 +45,12 @@
         {{/each}}
     </div>
 </div>
+
+<div>
+    {{#each links}}
+    <a href={{this.links}}>{{this.text}}</a>
+    {{/each}}
+</div>
+
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/realTimeProducts.js"></script>

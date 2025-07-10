@@ -8,8 +8,13 @@ const productManager = new ProductManager('./src/products.json');
 
 viewsRouter.get(('/'), async (req, res) => {
     try {
-        const products = await productManager.getProducts();
-        res.render('home', { products });
+        const filters = req.query;
+        const paylaod = await productManager.getProducts(filters);
+        const links = [];
+        for (let i = 1; i <= paylaod.totalPages; i++) {
+            links.push({ text: i, link: `?limit=${paylaod.limit}&page=${i}` });
+        }
+        res.render('home', { products: paylaod.products, links });
     } catch (error) {
         res.render('error');
     }
@@ -17,8 +22,13 @@ viewsRouter.get(('/'), async (req, res) => {
 
 viewsRouter.get(('/realtimeproducts'), async (req, res) => {
     try {
-        const products = await productManager.getProducts();
-        res.render('realTimeProducts', { products });
+        const filters = req.query;
+        const payload = await productManager.getProducts(filters);
+        const links = [];
+        for (let i = 1; i <= paylaod.totalPages; i++) {
+            links.push({ text: i, link: `?limit=${paylaod.limit}&page=${i}` });
+        }
+        res.render('realTimeProducts', { products: payload.products, links });
     } catch (error) {
         res.render('error');
     }

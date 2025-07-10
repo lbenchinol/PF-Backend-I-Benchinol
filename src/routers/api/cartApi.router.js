@@ -1,16 +1,15 @@
 import express from 'express';
-
 import CartManager from '../../cartManager.js';
 
-const cartManager = new CartManager("./src/carts.json");
+const cartManager = new CartManager();
 
 const cartApiRouter = express.Router();
 
 //  Crear un carrito
 cartApiRouter.post('/carts/', async (req, res) => {
     try {
-        await cartManager.addCart();
-        res.status(201).json({ status: "success" });
+        const payload = await cartManager.addCart();
+        res.status(201).json({ status: 'success', payload });
     } catch (error) {
         res.status(500).json({ status: "error" });
     }
@@ -20,8 +19,8 @@ cartApiRouter.post('/carts/', async (req, res) => {
 cartApiRouter.get('/carts/:cid', async (req, res) => {
     try {
         const cid = req.params.cid;
-        const cart = await cartManager.getCartById(cid);
-        res.status(200).json({ status: "success", cart });
+        const payload = await cartManager.getCartById(cid);
+        res.status(200).json({ status: 'success', payload });
     } catch (error) {
         res.status(500).json({ status: "error" });
     }
@@ -33,8 +32,8 @@ cartApiRouter.post('/carts/:cid/product/:pid', async (req, res) => {
         const cid = req.params.cid;
         const pid = req.params.pid;
         const quantity = req.body.quantity || 1;
-        await cartManager.updateCartById(cid, pid, quantity);
-        res.status(200).json({ status: "success" });
+        const payload = await cartManager.updateCartById(cid, pid, quantity);
+        res.status(200).json({ status: 'success', payload });
     } catch (error) {
         res.status(500).json({ status: "error" });
     }
@@ -45,19 +44,19 @@ cartApiRouter.delete('/carts/:cid/product/:pid', async (req, res) => {
     try {
         const cid = req.params.cid;
         const pid = req.params.pid;
-        await cartManager.deleteProductById(cid, pid);
-        res.status(200).json({ status: "success" });
+        const payload = await cartManager.deleteProductById(cid, pid);
+        res.status(200).json({ status: 'success', payload });
     } catch (error) {
         res.status(500).json({ status: "error" });
     }
 });
 
-//  Elimina el carrito por ID
+//  Vacia el carrito por ID
 cartApiRouter.delete('/carts/:cid', async (req, res) => {
     try {
         const cid = req.params.cid;
-        await cartManager.cleanCartById(cid);
-        res.status(200).json({ status: "success" });
+        const payload = await cartManager.cleanCartById(cid);
+        res.status(200).json({ status: 'success', payload });
     } catch (error) {
         res.status(500).json({ status: "error" });
     }

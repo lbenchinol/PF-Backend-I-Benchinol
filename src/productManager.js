@@ -1,34 +1,48 @@
-import fs from "fs";
+import Product from "./models/product.model";
 
 class ProductManager {
-    constructor(pathFile) {
-        this.pathFile = pathFile;
-    }
 
-    //  Obtiene y codifica la informacion JSON
-    async readJSON() {
+    //  Obtiene todos los productos segun filtros
+    async getProducts(filters) {
         try {
-            return JSON.parse(await fs.promises.readFile(this.pathFile, "utf-8"));
-        } catch (error) {
-            throw new Error(`Error al leer el archivo JSON.`, error);
-        }
-    }
+            const { limit = 10, page = 1, query, sort } = filters;
+            const filterQuery = {};
+            const options = {};
 
-    //  Codifica y escribe la informacion JSON
-    async writeJSON(data) {
-        try {
-            await fs.promises.writeFile(this.pathFile, JSON.stringify(data, null, 2), "utf-8");
-            return;
-        } catch (error) {
-            throw new Error(`Error al escribir el archivo JSON.`, error);
-        }
-    }
+            if (parseInt(limit) < 1) {
+                throw new Error('Error, ingrese los valores de "limit" correctamente.');
+            } else {
+                options.limit = limit;
+            }
+            if (parseInt(page) < 1) {
+                throw new Error('Error, ingrese los valores de "page" correctamente.');
+            } else {
+                options.page = page;
+            }
+            if (sort) {
+                if (sort !== 'asc' && sort !== 'desc') {
+                    throw new Error('Error, ingrese los valores de "sort" correctamente.');
+                } else {
+                    options.sort = { price: sort };
+                }
+            }
 
-    //  Obtiene todos los productos
-    async getProducts() {
-        try {
-            const products = await this.readJSON();
-            return products;
+            /* if (category) {
+                filterQuery.category = category;
+            }
+            if (stock) {
+                if (parseInt(stock) < 1) {
+                    throw new Error('Error, ingrese los valores de "stock" correctamente.');
+                } else {
+                    filterQuery.stock = stock;
+                }
+            } */
+
+            const data = await Product.paginate(filterQuery, options);
+            const products = data.docs;
+            delete data.docs;
+            const payload = { products, ...data };
+            return payload;
         } catch (error) {
             throw new Error(`Error al obtener los productos.`, error);
         }
@@ -37,12 +51,8 @@ class ProductManager {
     //  Obtiene un producto segun ID
     async getProductById(pid) {
         try {
-            const products = await this.readJSON();
-            const productIndex = products.findIndex((p) => p.id === parseInt(pid));
-            if (productIndex === -1) {
-                throw new Error(`Producto no encontrado. ID: ${pid}`, error);
-            }
-            return products[productIndex];
+            const product = await Product.findById(pid);
+            return product;
         } catch (error) {
             throw new Error(`Error al obtener el producto. ID: ${pid}`, error);
         }
@@ -51,28 +61,21 @@ class ProductManager {
     //  Agrega un producto nuevo
     async addProduct(product) {
         try {
-            const products = await this.readJSON();
-
-            let { title, description, code, price, status, stock, category, thumbnails } = product;
+            let { title, description, code, price, status, stock, category, thumbnail } = product;
 
             title !== "" ? title.trim() : title;
             description !== "" ? description.trim() : description;
             code !== "" ? code.trim() : code;
             status = true;
             category !== "" ? category.trim() : category;
-            thumbnails !== "" ? thumbnails.trim() : thumbnails;
+            thumbnail !== "" ? thumbnail.trim() : thumbnail;
 
             if (title == "" || description == "" || code == "" || price < 0 || stock < 0 || category == "") {
                 throw new Error(`Ingrese los valores correctamente.`, error);
             }
-            if (products.find(p => p.code === code)) {
-                throw new Error(`Error en el campo code (${code}). Ya se encuentra en el listado de productos.`, error.message);
-            }
 
-            const newId = this.idGenerator(products);
-            const newProduct = { id: newId, title, description, code, price, status, stock, category, thumbnails };
-            products.push(newProduct);
-            await this.writeJSON(products);
+            const newProduct = new Product({ title, description, code, price, status, stock, category, thumbnail });
+            await newProduct.save();
             return newProduct;
         } catch (error) {
             throw new Error(`Error al agregar el producto.`, error);
@@ -82,14 +85,9 @@ class ProductManager {
     //  Modifica un producto segun ID
     async updateProductById(pid, updatedProduct) {
         try {
-            const products = await this.readJSON();
-            const productIndex = products.findIndex((p) => p.id === parseInt(pid));
-            if (productIndex === -1) {
-                throw new Error(`Producto no encontrado. ID: ${pid}`, error);
-            }
-            products[productIndex] = { ...products[productIndex], ...updatedProduct };
-            await this.writeJSON(products);
-            return;
+            const product = await Product.findByIdAndUpdate(pid, updatedProduct, { new: true, runValidators: true });
+            if (!product) throw new Error(`Producto no encontrado. ID: ${pid}`);
+            return product;
         } catch (error) {
             throw new Error(`Error al modificar el producto. ID: ${pid}`, error);
         }
@@ -98,29 +96,13 @@ class ProductManager {
     //  Elimina un producto segun ID
     async deleteProductById(pid) {
         try {
-            const products = await this.readJSON();
-            const productIndex = products.findIndex((p) => p.id === parseInt(pid));
-            if (productIndex === -1) {
-                throw new Error(`Producto no encontrado. ID: ${pid}`, error);
-            }
-            products.splice(productIndex, 1);
-            await this.writeJSON(products);
+            const deletedProduct = await Product.findByIdAndDelete(pid);
+            if (!deletedProduct) throw new Error(`Producto no encontrado. ID: ${pid}`);
             return;
         } catch (error) {
             throw new Error(`Error al eliminar el producto. ID: ${pid}`, error);
         }
     }
-
-    //  Generador de nuevos ID's
-    idGenerator(products) {
-        if (products.length > 0) {
-            const newId = products[products.length - 1].id + 1;
-            return newId;
-        } else {
-            return 1;
-        }
-    }
-
 }
 
 export default ProductManager;
