@@ -3,9 +3,9 @@ import Product from "./models/product.model.js";
 class ProductManager {
 
     //  Obtiene todos los productos segun filtros
-    async getProducts(filters) {
+    async getProducts(filters, lean = false) {
         try {
-            const { limit = 10, page = 1, query, sort } = filters;
+            const { limit = 10, page = 1, category, stock, sort } = filters;
             const filterQuery = {};
             const options = {};
 
@@ -26,8 +26,7 @@ class ProductManager {
                     options.sort = { price: sort };
                 }
             }
-
-            /* if (category) {
+            if (category) {
                 filterQuery.category = category;
             }
             if (stock) {
@@ -36,9 +35,10 @@ class ProductManager {
                 } else {
                     filterQuery.stock = stock;
                 }
-            } */
+            }
 
-            const data = await Product.paginate(filterQuery, options);
+            const data = lean ? await Product.paginate(filterQuery, options).lean() : await Product.paginate(filterQuery, options);
+
             const products = data.docs;
             delete data.docs;
             const payload = { products, ...data };
