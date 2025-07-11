@@ -12,8 +12,8 @@ import cartApiRouter from './routers/api/cartApi.router.js';
 
 import viewsRouter from './routers/views/views.router.js';
 
-import ProductManager from './productManager.js';
-const productManager = new ProductManager('./src/products.json');
+import ProductManager from './dao/productManager.js';
+const productManager = new ProductManager();
 
 const app = express();
 const server = http.createServer(app);
@@ -21,7 +21,7 @@ const io = new Server(server);
 
 // Conexion con MongoDB
 connnectMongoDB();
- 
+
 app.use(express.json());
 app.use(express.static(__dirname + '/public'));
 

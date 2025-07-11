@@ -1,4 +1,4 @@
-import Cart from "./models/cart.model.js";
+import Cart from "../models/cart.model.js";
 
 class CartManager {
 
@@ -27,6 +27,17 @@ class CartManager {
     async updateCartById(cid, pid, quantity) {
         try {
             const cart = await Cart.findByIdAndUpdate(cid, { $push: { products: { product: pid, quantity } } }, { new: true, runValidators: true }).populate('products.product');
+            if (!cart) throw new Error(`Error al encontrar el carrito. ID: ${cid}`);
+            return cart;
+        } catch (error) {
+            throw new Error(`Error al modificar el carrito. ID: ${cid}`, error);
+        }
+    }
+
+    //  Modifica todo el carrito segun ID
+    async updateWholeCartById(cid, newData) {
+        try {
+            const cart = await Cart.findByIdAndUpdate(cid, { $set: { products: newData } }, { new: true, runValidators: true }).populate('products.product');
             if (!cart) throw new Error(`Error al encontrar el carrito. ID: ${cid}`);
             return cart;
         } catch (error) {

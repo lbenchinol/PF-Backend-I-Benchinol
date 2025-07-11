@@ -1,4 +1,5 @@
-import Product from "./models/product.model.js";
+import Product from "../models/product.model.js";
+import config from "../config/config.js";
 
 class ProductManager {
 
@@ -39,9 +40,15 @@ class ProductManager {
 
             const data = lean ? await Product.paginate(filterQuery, { ...options, lean: true }) : await Product.paginate(filterQuery, options);
 
+            const PORT = config.port;
+
             const payload = data.docs;
             delete data.docs;
-            const response = { status: 'success', payload, ...data };
+            const links = {
+                prevLink: data.prevPage ? `http://localhost:${PORT}/products?limit=${data.limit}&page=${data.prevPage}${data.category ? `&category=${data.category}` : ''}${data.stock ? `&stock=${data.stock}` : ''}` : null,
+                nextLink: data.nextPage ? `http://localhost:${PORT}/products?limit=${data.limit}&page=${data.nextPage}${data.category ? `&category=${data.category}` : ''}${data.stock ? `&stock=${data.stock}` : ''}` : null,
+            };
+            const response = { status: 'success', payload, ...data, ...links };
             return response;
         } catch (error) {
             throw new Error(`Error al obtener los productos.`, error);

@@ -5,7 +5,7 @@ const formCode = document.getElementById("form-code");
 const formPrice = document.getElementById("form-price");
 const formStock = document.getElementById("form-stock");
 const formCategory = document.getElementById("form-category");
-const formThumbnails = document.getElementById("form-thumbnails");
+const formThumbnail = document.getElementById("form-thumbnail");
 
 const productsContainer = document.getElementById("productsContainer");
 
@@ -13,12 +13,12 @@ const socket = io();
 
 // Recibo nuevo producto y se agrega al DOM
 socket.on('addProduct', (product) => {
-    productsContainer.innerHTML += `<div id=${product.id} class="card bg-body-secondary border border-black m-4" style="width: 18rem">
+    productsContainer.innerHTML += `<div id=${product._id} class="card bg-body-secondary border border-black m-4" style="width: 18rem">
             <div class="card-body">
                 <h5 class="card-title fw-bold">${product.title}</h5>
                 <p class="card-text">${product.description}</p>
                 <p class="card-text fw-semibold">Precio: $ ${product.price}</p>
-                <button id='btn${product.id}' class="btnDelete btn btn-outline-danger btn-sm">Eliminar</button>
+                <button id='btn${product._id}' class="btnDelete btn btn-outline-danger btn-sm">Eliminar</button>
             </div>
         </div>`;
 });
@@ -38,9 +38,9 @@ formBlock.addEventListener('submit', (e) => {
     const price = parseFloat(formPrice.value);
     const stock = parseInt(formStock.value);
     const category = formCategory.value;
-    const thumbnails = formThumbnails.value;
+    const thumbnail = formThumbnail.value;
 
-    const product = { title, description, code, price, stock, category, thumbnails };
+    const product = { title, description, code, price, stock, category, thumbnail };
 
     socket.emit('newProduct', product);
     formBlock.reset();

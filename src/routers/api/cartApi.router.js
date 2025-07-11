@@ -1,5 +1,5 @@
 import express from 'express';
-import CartManager from '../../cartManager.js';
+import CartManager from '../../dao/cartManager.js';
 
 const cartManager = new CartManager();
 
@@ -56,6 +56,18 @@ cartApiRouter.delete('/carts/:cid', async (req, res) => {
     try {
         const cid = req.params.cid;
         const payload = await cartManager.cleanCartById(cid);
+        res.status(200).json({ status: 'success', payload });
+    } catch (error) {
+        res.status(500).json({ status: "error" });
+    }
+});
+
+//  Actualiza todos los productos del carrito por ID
+cartApiRouter.put('/carts/:cid', async (req, res) => {
+    try {
+        const cid = req.params.cid;
+        const newData = req.body;
+        const payload = await cartManager.updateWholeCartById(cid, newData);
         res.status(200).json({ status: 'success', payload });
     } catch (error) {
         res.status(500).json({ status: "error" });
