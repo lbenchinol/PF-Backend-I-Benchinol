@@ -6,6 +6,7 @@ class CartManager {
     async getCartById(cid) {
         try {
             const cart = await Cart.findById(cid).populate('products.product');
+            if (!cart) throw new Error(`Error al encontrar el carrito. ID: ${cid}`);
             return cart;
         } catch (error) {
             throw new Error(`Error al obtener el carrito. ID: ${cid}`, error);
@@ -24,7 +25,7 @@ class CartManager {
     }
 
     //  Modifica un carrito segun ID
-    async updateCartById(cid, pid, quantity) {
+    async addProductOnCartById(cid, pid, quantity) {
         try {
             const cart = await Cart.findByIdAndUpdate(cid, { $push: { products: { product: pid, quantity } } }, { new: true, runValidators: true }).populate('products.product');
             if (!cart) throw new Error(`Error al encontrar el carrito. ID: ${cid}`);
@@ -48,7 +49,9 @@ class CartManager {
     //  Vaciar un carrito segun ID
     async cleanCartById(cid) {
         try {
-            const cart = new Cart.findByIdAndUpdate(cid, { $set: { products: [] } }, { new: true, runValidators: true });
+            const cart = await Cart.findByIdAndUpdate(cid, { $set: { products: [] } }, { new: true, runValidators: true }).populate('products.product');
+            if (!cart) throw new Error(`Error al encontrar el carrito. ID: ${cid}`);
+            return cart;
         } catch (error) {
             throw new Error(`Error al vaciar el carrito. ID: ${cid}`, error);
         }
@@ -62,6 +65,20 @@ class CartManager {
             return cart;
         } catch (error) {
             throw new Error(`Error al eliminar el producto ID: ${pid} del carrito ID: ${cid}`, error);
+        }
+    }
+
+    //  Modifica un carrito segun ID
+    async updateProductOnCartById(cid, pid, newQuantity) {
+        try {
+            if (newQuantity <= 0) {
+                throw new Error('La cantidad debe ser mayor a cero.', error.message);
+            }
+            const cart = await Cart.findOneAndUpdate({ _id: cid, 'products.product': pid }, { $set: { 'products.$.quantity': newQuantity } }, { new: true, runValidators: true }).populate('products.product');
+            if (!cart) throw new Error(`Error al encontrar el carrito. ID: ${cid}`);
+            return cart;
+        } catch (error) {
+            throw new Error(`Error al modificar el carrito. ID: ${cid}`, error);
         }
     }
 }

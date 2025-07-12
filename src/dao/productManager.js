@@ -59,6 +59,7 @@ class ProductManager {
     async getProductById(pid) {
         try {
             const product = await Product.findById(pid);
+            if (!product) throw new Error(`Producto no encontrado. ID: ${pid}`);
             return product;
         } catch (error) {
             throw new Error(`Error al obtener el producto. ID: ${pid}`, error);
